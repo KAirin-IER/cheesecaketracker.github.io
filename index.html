@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><title>Cheesecake Tasks</title>
+<html lang="en"><head><meta charset="utf-8"><title>Cheesecake Tasks • Pink Widget-Style App</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Cheesecake">
 <meta name="theme-color" content="#ffdfe9">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600&display=swap">
 <style>
+/* Widget-inspired compact view for iPhone Safari / Add to Home Screen. */
+body.compact .w{max-width:390px;padding:14px 16px 22px}
+body.compact .sl{width:92px}
+body.compact h1{font-size:24px}
+body.compact h1 b{font-size:19px}
+body.compact .sub{font-size:12px}
+body.compact .ch{width:22px!important}
+body.compact ul{margin-top:12px;gap:8px}
+body.compact li{border-radius:20px;padding:7px 10px}
+body.compact li span{font-size:15px}
+body.compact .t{width:34px;height:34px}
+body.compact .t svg{width:30px;height:30px}
+.view{border:1px solid #efbad0;background:#fff9fb;color:#a65b79;font:inherit;font-size:13px;padding:7px 14px;border-radius:18px;display:block;margin:10px auto 0}
+body.compact .cr{margin-top:16px}
+
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:#ffdfe9;color:#8a4a62;font-family:Fredoka,ui-rounded,"Avenir Next",system-ui,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
 .w{max-width:480px;margin:auto;padding:18px 16px 40px;position:relative}
@@ -52,7 +67,7 @@ li span{flex:1;font-size:18px;line-height:1.25;word-break:break-word}
 <span class="sp" style="left:56px;top:14px;font-size:22px">✦</span><span class="sp" style="right:52px;top:22px;font-size:18px;animation-delay:-.8s">✧</span><span class="sp" style="right:30px;top:112px;font-size:16px;color:#f27ca0;animation-delay:-1.6s">♡</span>
 <svg class="sl" viewBox="0 0 160 120"><path d="M14 78h132v20q0 8-8 8H22q-8 0-8-8z" fill="#e9b97a"/><path d="M14 78C14 40 146 40 146 78z" fill="#fff3d6"/><path d="M14 78h132v12H14z" fill="#ffd0de"/><path d="M14 78c8 12 12 0 22 8s14-8 24 4 14-8 24 2 14-8 24 4 12-6 20-6 8-2 18-4z" fill="#fff3d6"/><ellipse cx="55" cy="59" rx="7" ry="4" fill="#ff9db8" opacity=".6"/><ellipse cx="105" cy="59" rx="7" ry="4" fill="#ff9db8" opacity=".6"/><circle cx="67" cy="52" r="3.4" fill="#5a2a3c"/><circle cx="93" cy="52" r="3.4" fill="#5a2a3c"/><circle cx="68.2" cy="50.8" r="1.2" fill="#fff"/><circle cx="94.2" cy="50.8" r="1.2" fill="#fff"/><path d="M75 56q5 6 10 0" stroke="#5a2a3c" stroke-width="2" fill="none" stroke-linecap="round"/><g transform="translate(40 50) rotate(-18)"><path d="M0 0L-13-8v16zM0 0L13-8v16z" fill="#ff8fb0"/><circle r="4" fill="#ff6f98"/></g><circle cx="80" cy="30" r="12" fill="#e8264f"/><ellipse cx="76" cy="26" rx="4" ry="2.6" fill="#fff" opacity=".7"/><path d="M80 19c0-6 3-9 9-11" stroke="#5aa86a" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M89 8c6-2 10 1 11 4-6 2-10 0-11-4z" fill="#6cc27a"/></svg>
 <h1>Cheesecake Tasks <b>♡</b></h1><p class="sub">Little things, one slice at a time</p></header>
-<div class="bar"><i id="b"></i></div><div class="n" id="n"></div>
+<button class="view" id="view" type="button" aria-pressed="false">♡ Compact widget-style view</button><div class="bar"><i id="b"></i></div><div class="n" id="n"></div>
 <div class="add"><input id="i" placeholder="What’s on the menu today?" autocomplete="off" enterkeyhint="done"><button id="a">Add ♡</button></div>
 <ul id="l"></ul><button class="c" id="c" hidden>Clear finished tasks</button><div class="cr"></div></div>
 <script>
@@ -69,7 +84,12 @@ var n=T.length,k=T.filter(function(t){return t.d}).length;
 $('b').style.width=(n?k/n*100:0)+'%';$('n').textContent=n?k+' of '+n+' done'+(k==n?' – yum! 🍰':''):'';$('c').hidden=!k}
 function A(){var v=$('i').value.trim();if(!v)return;T.push({x:v,d:0,i:Math.floor(Math.random()*3)});$('i').value='';S();R()}
 $('a').onclick=A;$('i').onkeydown=function(e){if(e.key=='Enter')A()};
-$('c').onclick=function(){T=T.filter(function(t){return!t.d});S();R()};R();
+$('c').onclick=function(){T=T.filter(function(t){return!t.d});S();R()};
+var V='cheesecake-compact-v1';
+try{if(localStorage.getItem(V)==='1')document.body.classList.add('compact')}catch(e){}
+function updateView(){var on=document.body.classList.contains('compact');$('view').textContent=on?'♡ Full app view':'♡ Compact widget-style view';$('view').setAttribute('aria-pressed',String(on))}
+$('view').onclick=function(){document.body.classList.toggle('compact');try{localStorage.setItem(V,document.body.classList.contains('compact')?'1':'0')}catch(e){}updateView()};
+updateView();R();
 try{var v=document.createElement('canvas');v.width=v.height=180;var x=v.getContext('2d');x.fillStyle='#ffd3e1';x.fillRect(0,0,180,180);x.font='110px serif';x.textAlign='center';x.textBaseline='middle';x.fillText('🍰',90,98);
 var e=document.createElement('link');e.rel='apple-touch-icon';e.href=v.toDataURL();document.head.appendChild(e)}catch(e){}
 </script></body></html>
